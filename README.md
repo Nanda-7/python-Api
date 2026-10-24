@@ -113,5 +113,28 @@ response = requests.get(
 
 response.raise_for_status()
 
-data
-```
+
+- Session → Reuses connections and holds request configuration.
+- HTTPAdapter → Applies retry configuration to HTTP requests.
+- Retry → Defines when and how many times to retry.
+- Backoff → Defines waiting time between retries.
+- Timeout → Prevents waiting indefinitely for a response.
+
+
+1. Why use requests.Session()?
+A session allows you to reuse connections across multiple API calls.
+session = requests.Session()response = session.get(url)
+
+Benefits:
+- Reuses TCP connections (faster for repeated calls).
+- Maintains cookies and common headers.
+- Supports configuring retries through adapters.
+
+2. Why use HTTPAdapter?
+An adapter controls how the session handles HTTP connections.
+adapter = HTTPAdapter(max_retries=retry_strategy)session.mount("https://", adapter)
+This tells Python:
+
+Whenever an HTTPS request is made, use this adapter with the configured retry rules.
+
+weather4.py is production level api design with session, adapter and retry mechanism.
